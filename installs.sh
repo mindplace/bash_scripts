@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # If on a mac: xcode
 xcode-select --install
 
@@ -25,9 +27,6 @@ brew install ruby-build
 rbenv install 2.3.0
 rbenv global 2.3.0
 
-# install Bundler
-gem install bundler
-
 # Other ------------------------------------------------------------------------------------------
 
 # Node.js
@@ -47,3 +46,18 @@ launchctl load ~/Library/LaunchAgents/homebrew/mxcl.postgresql.plist
 #  http://stackoverflow.com/questions/7975414/how-to-check-status-of-postgresql-server-mac-os-x
 #  http://stackoverflow.com/questions/7975556/how-to-start-postgresql-server-on-mac-os-x
 #  https://chartio.com/resources/tutorials/how-to-start-postgresql-server-on-mac-os-x/
+
+# Gems ------------------------------------------------------------------------------------------
+
+# install Bundler
+gem install bundler
+
+# install favorite gems
+gem install pry
+gem install rails
+gem install pg
+
+gem install rspec
+touch ~/.rspec
+echo "--color" >> ~/.rspec
+echo "--format documentation" >> ~/.rspec

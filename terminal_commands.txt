@@ -1,17 +1,7 @@
-pwd
-print working directory
+# Not second nature yet
 
 hostname
 my computer's network name
-
-mkdir
-make directory
-
-cd
-change directory
-
-ls
-list directory
 
 rmdir
 remove directory
@@ -25,14 +15,8 @@ pop directory
 cp
 copy a file or directory
 
-mv
-move a file or directory
-
 less
 page through a file
-
-cat
-print the whole file
 
 xargs
 execute arguments
@@ -40,14 +24,43 @@ execute arguments
 find
 find files
 
-grep
-find things inside files
-
 man
 read a manual page
 
 apropos
 find what man page is appropriate
+
+chmod
+change permission modifiers
+
+chown
+change ownership
+
+chmod 755 [filename]
+permits this file to be executed 
+
+# Comfortable
+
+pwd
+print working directory
+
+mkdir
+make directory
+
+cd
+change directory
+
+ls
+list directory
+
+mv
+move a file or directory
+
+cat
+print the whole file
+
+grep
+find things inside files
 
 env
 look at your environment
@@ -63,9 +76,3 @@ exit the shell
 
 sudo
 DANGER! become super user root DANGER!
-
-chmod
-change permission modifiers
-
-chown
-change ownership

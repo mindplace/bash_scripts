@@ -1,7 +1,9 @@
-# Read the logs 
+#!/bin/bash
+
+# Read the logs
 cat /usr/local/var/postgres/server.log
 
-# View running processes 
+# View running processes
 ps auxwww | grep postgres
 
 # Start Postgresql

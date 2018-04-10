@@ -1,10 +1,14 @@
-# Set default prompt
-export PS1="\n\W : "
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
+# Set default prompt, with git branch
+export PS1="\n\W\[\033[32m\]\$(parse_git_branch)\[\033[00m\]: "
 
 DIRECTORY=$(pwd)
 # STARTUP: ON opening new window or tab: IF current directory is NOT within Programming, cd into Programming
 if [[ ${DIRECTORY} != *"Programming"* ]] ; then
-  cd /Users/Mac/Google\ Drive/Documents/Programming/
+  cd /Users/Mac/Desktop/Programming/
 fi
 
 # Managing Rbenv
