@@ -10,6 +10,7 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 brew install git
 
 # setup Git -- but then do my own update for the ~/.gitconfig file:
+cd ~/
 git clone https://github.com/supertopher/dotfiles.git
 cd dotfiles
 ./install
