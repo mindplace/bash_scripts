@@ -38,7 +38,7 @@ export GREP_OPTIONS='--color=always'
 export PS1="\n\W\[\033[32m\]\$(parse_git_branch)\[\033[00m\]: "
 
 DIRECTORY=$(pwd)
-# STARTUP: ON opening new window or tab: IF current directory is NOT within Programming, cd into Programming
+# STARTUP: ON opening new window or tab: IF current directory is NOT within src, cd into src
 if [[ ${DIRECTORY} != *"src"* ]] ; then
   cd ~/src/
 fi
@@ -68,6 +68,12 @@ test -d /usr/local/heroku/ && export PATH="/usr/local/heroku/bin:$PATH"
 # Testtrack
 [ -f ~/.bashrc ] && source ~/.bashrc
 
+terminate_test_track() {
+ psql -d 'test_track_development' -c
+  "select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = 'test_track_development' and pid <> pg_backend_pid()"
+  || true
+}
+
 # -- Aliases --------------------------------------
 
 # bundle exec turns into be
@@ -75,9 +81,6 @@ alias be="bundle exec"
 
 # Ensures that Atom doesn't open several instances
 alias atom="open -a /Applications/Atom.app/Contents/MacOS/Atom"
-
-# shortcut for opening files and folders with macvim
-# alias macvim='open -a macvim'
 
 # shortcut to Programming folder
 alias home='cd ~/src'
