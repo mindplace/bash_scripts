@@ -2,6 +2,7 @@
 
 export VAULT_CACERT=~/.openssl/betterment.cer
 export VAULT_ADDR=https://vault.betterment.qa
+export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
 
 # -- Fix for Java running out of memory ---------
 
@@ -19,6 +20,9 @@ NO_DOCK_ICON="-Djava.awt.headless=true"
 export GRADLE_OPTS="$LOTS_O_MEM $GC_PERMGEN $NO_DOCK_ICON $DO_DUMPS"
 export JAVA_OPTS="$LOTS_O_MEM $GC_PERMGEN $NO_DOCK_ICON $DO_DUMPS"
 export CATALINA_OPTS="$LOTS_O_MEM $GC_PERMGEN $DO_DUMPS"
+
+# Fix for OS X bug with Ruby forks
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 
 # -- Terminal, git settings ---------------------
 parse_git_branch() {
@@ -58,20 +62,25 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 # Path for RBENV
 test -d "$HOME/.rbenv/" && PATH="$HOME/.rbenv/bin:$PATH"
 
-# -- Homebrew, Heroku, Testtrack -----------------------------
+# -- Homebrew, Heroku -----------------------------
 # Path for Homebrew
 test -d /usr/local/bin && export PATH="/usr/local/bin:/usr/local/sbin:~/bin:$PATH"
 
 # Path for Heroku
 test -d /usr/local/heroku/ && export PATH="/usr/local/heroku/bin:$PATH"
 
-# Testtrack
+# -- Testtrack, databases -------------------------------------
 [ -f ~/.bashrc ] && source ~/.bashrc
 
 terminate_test_track() {
- psql -d 'test_track_development' -c
-  "select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = 'test_track_development' and pid <> pg_backend_pid()"
-  || true
+  PGCOMMAND="select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = 'test_track_development' and pid <> pg_backend_pid()"
+  psql -d 'test_track_development' -c "$PGCOMMAND" || true
+}
+
+setup_retail_test_db() {
+  cd /Users/estherleytush/src/retail/retail_core
+  bundle exec rake app:retail:test:prepare && bundle exec rake app:bettermentdb:test:prepare
+  cd -
 }
 
 # -- Aliases --------------------------------------
@@ -85,4 +94,5 @@ alias atom="open -a /Applications/Atom.app/Contents/MacOS/Atom"
 # shortcut to Programming folder
 alias home='cd ~/src'
 
-alias myrondo="RBENV_VERSION=$(cat $HOME/src/coach/rondo/.ruby-version) BUNDLE_GEMFILE=$HOME/src/coach/rondo/Gemfile bundle exec $HOME/src/coach/rondo/exe/rondo"
+# run coach cli locally from source
+alias mycoach="RBENV_VERSION=$(cat $HOME/src/coach/coach_cli/.ruby-version) BUNDLE_GEMFILE=$HOME/src/coach/coach_cli/Gemfile bundle exec $HOME/src/coach/coach_cli/exe/coach"
