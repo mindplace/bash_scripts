@@ -1,5 +1,6 @@
 # -- Vars ---------------------------------------
 
+# SSL vault
 export VAULT_CACERT=~/.openssl/betterment.cer
 export VAULT_ADDR=https://vault.betterment.qa
 export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
@@ -25,6 +26,8 @@ export CATALINA_OPTS="$LOTS_O_MEM $GC_PERMGEN $DO_DUMPS"
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 
 # -- Terminal, git settings ---------------------
+[ -f ~/.bashrc ] && source ~/.bashrc
+
 parse_git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
@@ -32,6 +35,7 @@ parse_git_branch() {
 # Colors ls should use for folders, files, symlinks etc, see `man ls` and
 # search for LSCOLORS
 export LSCOLORS=GxFxCxDxBxegedabagaced
+
 # Force ls to use colors (G) and use humanized file sizes (h)
 alias ls='ls -Gh'
 
@@ -41,8 +45,8 @@ export GREP_OPTIONS='--color=always'
 # Set default prompt, with git branch
 export PS1="\n\W\[\033[32m\]\$(parse_git_branch)\[\033[00m\]: "
 
-DIRECTORY=$(pwd)
 # STARTUP: ON opening new window or tab: IF current directory is NOT within src, cd into src
+DIRECTORY=$(pwd)
 if [[ ${DIRECTORY} != *"src"* ]] ; then
   cd ~/src/
 fi
@@ -52,12 +56,8 @@ if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash
 fi
 
-# -- Managing Rbenv ----------------------------
+# -- Rbenv ----------------------------
 eval "$(rbenv init -)"
-export PATH="$HOME/.rbenv/bin:$PATH"
-
-# Rbenv autocomplete and shims
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # Path for RBENV
 test -d "$HOME/.rbenv/" && PATH="$HOME/.rbenv/bin:$PATH"
@@ -69,12 +69,16 @@ test -d /usr/local/bin && export PATH="/usr/local/bin:/usr/local/sbin:~/bin:$PAT
 # Path for Heroku
 test -d /usr/local/heroku/ && export PATH="/usr/local/heroku/bin:$PATH"
 
-# -- Testtrack, databases -------------------------------------
-[ -f ~/.bashrc ] && source ~/.bashrc
-
+# -- Testtrack -------------------------------------
 terminate_test_track() {
   PGCOMMAND="select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = 'test_track_development' and pid <> pg_backend_pid()"
   psql -d 'test_track_development' -c "$PGCOMMAND" || true
+}
+
+# -- Databases -------------------------------------
+terminate_retail_development_db() {
+  brew services restart mysql
+  psql -d 'retail_development' -c "select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = 'retail_development' and pid <> pg_backend_pid()" || true
 }
 
 setup_retail_test_db() {
@@ -83,6 +87,18 @@ setup_retail_test_db() {
   cd -
 }
 
+reset_retail_db() {
+  terminate_retail_development_db
+  setup_retail_test_db
+}
+
+# -- Node ---------------------------------------
+
+export NODE_EXTRA_CA_CERTS=/usr/local/etc/openssl/cert.pem
+
+# Using node env to define Node version
+eval "$(nodenv init -)"
+
 # -- Aliases --------------------------------------
 
 # bundle exec turns into be
@@ -90,6 +106,9 @@ alias be="bundle exec"
 
 # Ensures that Atom doesn't open several instances
 alias atom="open -a /Applications/Atom.app/Contents/MacOS/Atom"
+
+# Sublime Text
+alias subl="open -a 'Sublime Text'"
 
 # shortcut to Programming folder
 alias home='cd ~/src'
