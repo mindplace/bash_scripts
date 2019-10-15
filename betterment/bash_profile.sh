@@ -56,19 +56,6 @@ if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash
 fi
 
-# -- Rbenv ----------------------------
-eval "$(rbenv init -)"
-
-# Path for RBENV
-test -d "$HOME/.rbenv/" && PATH="$HOME/.rbenv/bin:$PATH"
-
-# -- Homebrew, Heroku -----------------------------
-# Path for Homebrew
-test -d /usr/local/bin && export PATH="/usr/local/bin:/usr/local/sbin:~/bin:$PATH"
-
-# Path for Heroku
-test -d /usr/local/heroku/ && export PATH="/usr/local/heroku/bin:$PATH"
-
 # -- Testtrack -------------------------------------
 terminate_test_track() {
   PGCOMMAND="select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = 'test_track_development' and pid <> pg_backend_pid()"
@@ -95,9 +82,6 @@ reset_retail_db() {
 # -- Node ---------------------------------------
 
 export NODE_EXTRA_CA_CERTS=/usr/local/etc/openssl/cert.pem
-
-# Using node env to define Node version
-eval "$(nodenv init -)"
 
 # -- Aliases --------------------------------------
 
