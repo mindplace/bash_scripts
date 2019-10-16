@@ -39,8 +39,8 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 # Force ls to use colors (G) and use humanized file sizes (h)
 alias ls='ls -Gh'
 
-# Force grep to always use the color option and show line numbers
-export GREP_OPTIONS='--color=always'
+# Ensure grep doesn't use additional flags as that interferes with DSSH
+export GREP_OPTIONS=''
 
 # Set default prompt, with git branch
 export PS1="\n\W\[\033[32m\]\$(parse_git_branch)\[\033[00m\]: "
