@@ -63,19 +63,9 @@ terminate_test_track() {
 }
 
 # -- Databases -------------------------------------
-terminate_retail_development_db() {
-  brew services restart mysql
-  psql -d 'retail_development' -c "select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = 'retail_development' and pid <> pg_backend_pid()" || true
-}
-
-setup_retail_test_db() {
-  cd /Users/estherleytush/src/retail/retail_core
-  bundle exec rake app:retail:test:prepare && bundle exec rake app:bettermentdb:test:prepare
-  cd -
-}
-
 reset_retail_db() {
-  terminate_retail_development_db
+  brew services restart mysql
+  brew services restart postgresql@9.6
   setup_retail_test_db
 }
 
