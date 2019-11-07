@@ -63,6 +63,13 @@ terminate_test_track() {
 }
 
 # -- Databases -------------------------------------
+
+setup_retail_test_db() {
+  cd /Users/estherleytush/src/retail/retail_core
+  bundle exec rake app:retail:test:prepare && bundle exec rake app:bettermentdb:test:prepare
+  cd -
+}
+
 reset_retail_db() {
   brew services restart mysql
   brew services restart postgresql@9.6
