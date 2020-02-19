@@ -39,7 +39,7 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 # Force ls to use colors (G) and use humanized file sizes (h)
 alias ls='ls -Gh'
 
-# Ensure grep doesn't use additional flags as that interferes with DSSH
+# ensure grep doesn't use additional flags as that interferes with DSSH
 export GREP_OPTIONS=''
 
 # Set default prompt, with git branch
@@ -55,6 +55,15 @@ fi
 if [ -f ~/.git-completion.bash ]; then
   . ~/.git-completion.bash
 fi
+
+# run command x times
+run() {
+    number=$1
+    shift
+    for i in `seq $number`; do
+      $@
+    done
+}
 
 # -- Testtrack -------------------------------------
 terminate_test_track() {
@@ -96,3 +105,4 @@ alias home='cd ~/src'
 
 # run coach cli locally from source
 alias mycoach="RBENV_VERSION=$(cat $HOME/src/coach/coach_cli/.ruby-version) BUNDLE_GEMFILE=$HOME/src/coach/coach_cli/Gemfile bundle exec $HOME/src/coach/coach_cli/exe/coach"
+export PATH="/usr/local/sbin:$PATH"
