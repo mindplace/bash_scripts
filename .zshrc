@@ -39,6 +39,13 @@ run() {
     done
 }
 
+# Ensure Ruby executables go to the right place
+export GEM_HOME="$HOME/.gem"
+
+# Get RBENV to find its place
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+
 # -- Aliases --------------------------------------
 
 # bundle exec turns into be
