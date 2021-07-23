@@ -26,9 +26,7 @@ if [[ ${DIRECTORY} != *"src"* ]] ; then
 fi
 
 # autocomplete for git:
-if [ -f ~/.git-completion.bash ]; then
-  . ~/.git-completion.bash
-fi
+autoload -Uz compinit && compinit
 
 # run command x times
 run() {
