@@ -1,52 +1,63 @@
 #!/bin/bash
 
-# If on a mac: xcode
-xcode-select --install
+# last update: 2023-1-19
 
-# homebrew ------------------------------------------------------------------------------------------
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+# Homebrew -------------------------------------------------------------------------------------
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# VSCode ---------------------------------------------------------------------------------------
+brew install --cask visual-studio-code
+
+# Finish up: configure VSCode
+# Prevent multiple instances https://superuser.com/questions/1264660/how-to-prevent-vs-code-from-opening-multiple-instances-of-a-same-file
+# Install 'Atom Dark' extension
+
+# Setup zshrc ----------------------------------------------------------------------------------
+touch ~/.zshrc && open -a 'Visual Studio Code' ~/.zshrc # then paste in contents of latest .zshrc file
+
+mkdir ~/src
+
+# Finish up: configure visual settings for terminal
 
 # git ------------------------------------------------------------------------------------------
 brew install git
 
-# setup Git -- but then do my own update for the ~/.gitconfig file:
-cd ~/
-git clone https://github.com/supertopher/dotfiles.git
-cd dotfiles
-./install
+# configure git
+touch ~/.gitconfig && open -a 'Visual Studio Code' ~/.gitconfig # then paste in contents of latest .gitconfig file
+touch ~/.gitignore && open -a 'Visual Studio Code' ~/.gitignore # then paste in contents of latest .gitignore file
 
-# configure git, then generate and add SSH key of comp to github, and use homebrew to setup password caching
-git config --global user.name "Esther Leytush"
-git config --global user.email eleytush@gmail.com
+# setup git autocomplete
+brew install compinit
+
+# Generate and add SSH key of comp to Github
+ssh-keygen -t ed25519 -C "my_email@gmail.com" # at next prompts, press enter
+eval "$(ssh-agent -s)"
+touch ~/.ssh/config
+open -a 'Visual Studio Code' ~/.ssh/config # paste contents from https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent
+ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+pbcopy < ~/.ssh/id_ed25519.pub # make into new key on https://github.com/settings/keys
 
 # Ruby ------------------------------------------------------------------------------------------
 
 # install Rbenv (choose this or RVM, they can't both work together)
-brew install ruby-build
+brew install rbenv
 
 # install current Ruby version
-rbenv install 2.3.0
-rbenv global 2.3.0
+rbenv install -l # and select latest stable Ruby version to install
+rbenv install 3.2.0
+# set the version installed as the global Ruby version to avoid using the pre-installed Mac-use-only Ruby version
+rbenv global 3.2.0 
 
 # Other ------------------------------------------------------------------------------------------
 
 # Node.js
 brew install node
 
-# SQLite3
-brew install SQLite3
-brew link sqlite3 --force
-
 # PostgreSQL
 brew install postgres
 mkdir -p $HOME/Library/LaunchAgents
 ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents
 launchctl load ~/Library/LaunchAgents/homebrew/mxcl.postgresql.plist
-
-# Have issues? Some help with PostgreSQL:
-#  http://stackoverflow.com/questions/7975414/how-to-check-status-of-postgresql-server-mac-os-x
-#  http://stackoverflow.com/questions/7975556/how-to-start-postgresql-server-on-mac-os-x
-#  https://chartio.com/resources/tutorials/how-to-start-postgresql-server-on-mac-os-x/
 
 # Gems ------------------------------------------------------------------------------------------
 

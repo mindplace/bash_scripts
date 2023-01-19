@@ -1,4 +1,4 @@
-# Not second nature yet
+# keep until it's second-nature
 
 hostname
 my computer's network name
