@@ -1,6 +1,6 @@
 # -- Terminal settings --------------------------
 setopt PROMPT_SUBST
-PROMPT=$'%1d\e[0;32m$(parse_git_branch)\e[0m: '
+PROMPT=$'%1d%F{green}$(parse_git_branch)%f%F{normal}: '
 
 # STARTUP: start in the right folder
 DIRECTORY=$(pwd)
@@ -56,13 +56,5 @@ alias code="open -a 'Visual Studio Code'"
 # shortcut to src folder
 alias home='cd ~/src'
 
-# -- Useful functions -----------------------------
-
-# run command x times
-run() {
-    number=$1
-    shift
-    for i in `seq $number`; do
-      $@
-    done
-}
+# reload environment
+alias reload='source ~/.zshrc'
